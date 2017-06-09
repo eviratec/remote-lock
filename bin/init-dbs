@@ -1,0 +1,64 @@
+#!/usr/bin/env node
+/**
+ * https://github.com/eviratec/remote-lock
+ * Copyright (c) 2017 Callan Peter Milne
+ *
+ * Permission to use, copy, modify, and/or distribute this software for any
+ * purpose with or without fee is hereby granted, provided that the above
+ * copyright notice and this permission notice appear in all copies.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+ * REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND
+ * FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+ * INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+ * LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+ * OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+ * PERFORMANCE OF THIS SOFTWARE.
+ */
+"use strict";
+
+const fs = require("fs");
+const path = require("path");
+
+const PKG = require("../package.json");
+const _c = PKG.config.constants;
+
+const configPath = require("../src/configPath");
+const readJsonDb = require("../src/readJsonDb");
+const writeJsonDb = require("../src/writeJsonDb");
+
+const DEVICE_DB_PATH = configPath(_c.DEVICE_DB);
+const COMMAND_DB_PATH = configPath(_c.COMMAND_DB);
+
+try {
+  let deviceDb = readJsonDb(DEVICE_DB_PATH);
+  if (!Array.isArray(deviceDb)) {
+    throw new Error();
+  }
+  console.log(`${_c.DEVICE_DB} db already exists`);
+}
+catch (err) {
+  writeJsonDb(DEVICE_DB_PATH, Buffer.from(JSON.stringify([{
+    "id": "ENLIM-ROG",
+    "uuid": "3fdbb941-8695-439c-970d-33647fb503c2",
+    "hash": "05190359d59dfda11b816616123241901d4b8c37c9928316639ebf1f1f724439",
+    "loggedIn": true
+  }, {
+    "id": "ENLIM-IPHONE",
+    "uuid": "9156379b-7204-4a30-be9e-12bd8edb901f",
+    "loggedIn": false
+  }])+"\n"));
+  console.log(`${_c.DEVICE_DB} db setup success`);
+}
+
+try {
+  let commandDb = readJsonDb(COMMAND_DB_PATH);
+  if (!Array.isArray(commandDb)) {
+    throw new Error();
+  }
+  console.log(`${_c.COMMAND_DB} db already exists`);
+}
+catch (err) {
+  writeJsonDb(COMMAND_DB_PATH, Buffer.from(JSON.stringify([])+"\n"));
+  console.log(`${_c.COMMAND_DB} db setup success`);
+}

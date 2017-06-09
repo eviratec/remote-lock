@@ -1,0 +1,23 @@
+{
+  "name": "remote-lock",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "postinstall": "./bin/init-dbs"
+  },
+  "config": {
+    "constants": {
+      "DEVICE_DB": "devices.json",
+      "COMMAND_DB": "commands.json"
+    }
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.17.2",
+    "express": "^4.15.3",
+    "uuid": "^3.0.1"
+  }
+}

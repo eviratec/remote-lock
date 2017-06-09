@@ -1,0 +1,54 @@
+<!doctype html>
+<html>
+<head>
+
+  <title>Remote Lock</title>
+
+  <script type="application/javascript"
+    src="bower_components/angular/angular.min.js"></script>
+  <script type="application/javascript"
+    src="bower_components/angular-aria/angular-aria.min.js"></script>
+  <script type="application/javascript"
+    src="bower_components/angular-animate/angular-animate.min.js"></script>
+  <script type="application/javascript"
+    src="bower_components/angular-messages/angular-messages.min.js"></script>
+  <script type="application/javascript"
+    src="bower_components/angular-material/angular-material.min.js"></script>
+
+  <link rel="stylesheet"
+    href="bower_components/angular-material/angular-material.min.css">
+  <link rel="stylesheet"
+    href="style.css">
+
+</head>
+<body ng-app="remoteLock">
+
+  <div id="app"
+    ng-controller="DeviceListController as $list">
+
+    <div id="devices">
+      <div class="device-line"
+        ng-repeat="device in $list.devices">
+        <span>{{ device.id }}</span>
+        <md-button class="md-warn md-raised"
+          ng-if="device.loggedIn"
+          ng-click="device.logout($event)">Logout</md-button>
+        <md-button class="md-primary"
+          ng-if="!device.loggedIn"
+          ng-click="device.login($event)">Login</md-button>
+      </div>
+    </div>
+
+    <div id="log">
+      <div class="log-line"
+        ng-repeat="log in $list.cmds.queued">
+        <span>{{ log.cmd }}</span>
+        @
+        <span>{{ log.target }}</span>
+      </div>
+    </div>
+
+  </div>
+
+  <script type="application/javascript"
+    src="main.js"></script>
