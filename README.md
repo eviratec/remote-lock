@@ -2,6 +2,29 @@
 
 For Ubuntu Desktop
 
+## Local environment setup
+
+1. Install npm dependencies & init dbs
+```shell
+$ npm install
+```
+2. Install bower dependencies
+```shell
+$ bower install
+```
+3. Start the web service
+```shell
+$ ./bin/service
+```
+4. Angular.js GUI http://localhost:3000/index.html
+5. Express.js API routes
+```
+GET http://localhost:3000/info
+GET http://localhost:3000/device/uuid(:deviceUuid)
+GET http://localhost:3000/command/uuid(:commandUuid)
+POST http://localhost:3000/incoming/commands
+```
+
 ## License
 
 By [Eviratec Software](https://www.eviratec.com.au)
@@ -21,4 +44,3 @@ LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
 OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
 PERFORMANCE OF THIS SOFTWARE.
 ```
-
