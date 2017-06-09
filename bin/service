@@ -30,8 +30,10 @@ const app = express();
 const configPath = require("../src/configPath");
 const readJsonDb = require("../src/readJsonDb");
 
-const DeviceRepo = require('../src/DeviceRepo');
-const CommandRepo = require('../src/CommandRepo');
+const DeviceRepo = require("../src/DeviceRepo");
+const CommandRepo = require("../src/CommandRepo");
+
+const exec = require("../src/exec");
 
 const CMD_STATE_QUEUED = "2-queued";
 const CMD_STATE_INPROGRESS = "1-inprogress";
@@ -44,6 +46,15 @@ const CMD_STATE_STOPPED = "0-stopped";
 
   deviceList.addDevices(readJsonDb(configPath(_c.DEVICE_DB)));
   commandList.addCommands(readJsonDb(configPath(_c.COMMAND_DB)));
+
+  commandList.on("command:added", (newCommand) => {
+    console.log(newCommand);
+    exec(newCommand)
+      .then((res) => {
+        console.log(`res for command ${newCommand.uuid}:\n`
+          + `${res}\n\n`);
+      });
+  });
 
   app.get("/info", function (req, res) {
     res.send({

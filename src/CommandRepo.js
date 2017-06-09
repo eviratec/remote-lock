@@ -16,8 +16,11 @@
  */
 "use strict";
 
-class CommandRepo {
+const EventEmitter = require("events");
+
+class CommandRepo extends EventEmitter {
   constructor () {
+    super();
     this.commands = [];
     this.commandsByUuid = {};
   }
@@ -40,6 +43,9 @@ class CommandRepo {
     uuid = command.uuid;
     this.commands.push(command);
     this.commandsByUuid[uuid] = command;
+    process.nextTick(() => {
+      this.emit("command:added", command);
+    });
     return this.commands;
   }
   getCommandByUuid (uuid) {

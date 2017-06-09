@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 /**
  * https://github.com/eviratec/remote-lock
  * Copyright (c) 2017 Callan Peter Milne
@@ -16,44 +17,12 @@
  */
 "use strict";
 
-const EventEmitter = require("events");
-
-class DeviceRepo extends EventEmitter {
-  constructor () {
-    super();
-    this.devices = [];
-    this.devicesByUuid = {};
-  }
-  addDevices (devices) {
-    devices = devices || [];
-    if (devices.length === 0) {
-      return this.devices;
-    }
-    devices.forEach(device => {
-      this.addDevice(device);
+function LoginCommand (readJsonDb, writeJsonDb) {
+  return function exec (command) {
+    return new Promise((resolve, reject) => {
+      resolve("Success! Your device should now be unlocked.");
     });
-    return this.devices;
-  }
-  addDevice (device) {
-    let uuid;
-    device = device || {};
-    if (!device.uuid) {
-      return this.devices;
-    }
-    uuid = device.uuid;
-    this.devices.push(device);
-    this.devicesByUuid[uuid] = device;
-    process.nextTick(() => {
-      this.emit("device:added", device);
-    });
-    return this.devices;
-  }
-  getDeviceByUuid (uuid) {
-    return this.devicesByUuid[uuid];
-  }
-  toJSON () {
-    return this.devices;
-  }
+  };
 }
 
-module.exports = DeviceRepo;
+module.exports = LoginCommand;
