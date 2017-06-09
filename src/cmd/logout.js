@@ -17,10 +17,33 @@
  */
 "use strict";
 
-function LogoutCommand (readJsonDb, writeJsonDb) {
-  return function exec (command) {
+function LogoutCommand (PKG, readJsonDb, writeJsonDb) {
+  return function exec (command, opt) {
+    opt = opt || {};
     return new Promise((resolve, reject) => {
-      resolve("Success! Your device should now be locked.");
+      // PKG.config.commands.unlock
+      let deviceRepo;
+      let deviceId;
+      let deviceUuid;
+      let device;
+      try {
+        deviceRepo = opt.deviceRepo;
+        if (!deviceRepo) {
+          reject(new Error("No devices repository"));
+        }
+        deviceId = command.target.id;
+        deviceUuid = command.target.uuid;
+        device = deviceRepo.getDeviceByUuid(deviceUuid);
+      }
+      catch (err) {
+        return reject(err);
+      }
+      device.logout()
+        .then(function (res) {
+          console.log(`Success! Device<${deviceId}> should now be locked.`);
+          resolve(res);
+        })
+        .catch(reject);
     });
   };
 }

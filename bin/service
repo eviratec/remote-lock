@@ -49,7 +49,7 @@ const CMD_STATE_STOPPED = "0-stopped";
 
   commandList.on("command:added", (newCommand) => {
     console.log(newCommand);
-    exec(newCommand)
+    exec(newCommand, {deviceRepo: deviceList})
       .then((res) => {
         console.log(`res for command ${newCommand.uuid}:\n`
           + `${res}\n\n`);

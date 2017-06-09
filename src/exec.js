@@ -24,6 +24,10 @@ const configPath = require("./configPath");
 const readJsonDb = require("./readJsonDb");
 const writeJsonDb = require("./writeJsonDb");
 
+const DeviceRepo = require("./DeviceRepo");
+
+const PKG = require("../package.json");
+
 const commandsByCmd = {};
 
 const CMD_DIR_PATH = path.resolve(path.join("src","cmd"));
@@ -33,7 +37,11 @@ const availableCommands = fs.readdirSync(CMD_DIR_PATH).map((cmd) => {
     return;
   }
   cmd = cmd.replace(/\.js$/, "");
-  commandsByCmd[cmd] = require(`${CMD_DIR_PATH}/${cmd}`)(readJsonDb, writeJsonDb);
+  commandsByCmd[cmd] = require(`${CMD_DIR_PATH}/${cmd}`)(
+    PKG,
+    readJsonDb,
+    writeJsonDb
+  );
   return commandsByCmd[cmd];
 });
 
@@ -44,13 +52,13 @@ class InvalidCommandError extends Error {
   }
 }
 
-function exec (command) {
+function exec (command, opt) {
   let cmd = command.cmd;
   let invalidCommand = !commandAvailable(cmd);
   if (invalidCommand) {
     throw new InvalidCommandError(cmd);
   }
-  return commandsByCmd[cmd](command);
+  return commandsByCmd[cmd](command, opt);
 }
 
 Object.defineProperties(exec, {

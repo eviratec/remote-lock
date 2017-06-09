@@ -8,6 +8,10 @@
     "postinstall": "./bin/init-dbs"
   },
   "config": {
+    "commands": {
+      "lock": "gnome-screensaver-command -l",
+      "unlock": "gnome-screensaver-command -d"
+    },
     "constants": {
       "DEVICE_DB": "devices.json",
       "COMMAND_DB": "commands.json"

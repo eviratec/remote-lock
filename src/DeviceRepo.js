@@ -17,6 +17,7 @@
 "use strict";
 
 const EventEmitter = require("events");
+const Device = require("./Device");
 
 class DeviceRepo extends EventEmitter {
   constructor () {
@@ -41,6 +42,9 @@ class DeviceRepo extends EventEmitter {
       return this.devices;
     }
     uuid = device.uuid;
+    if (!Device.is(device)) {
+      device = new Device(device);
+    }
     this.devices.push(device);
     this.devicesByUuid[uuid] = device;
     process.nextTick(() => {
